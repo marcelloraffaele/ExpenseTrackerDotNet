@@ -4,9 +4,15 @@ It consists of two main components: an API for managing expenses and a web appli
 
 ## Project folders
 
-- `ExpenseTrackerAPI`: This folder contains the API project, which handles all backend operations related to expense management. It includes controllers, models, and services for managing expenses.
-- `ExpenseTrackerWeb`: This folder contains the web application project, which provides a user interface for interacting with the expense tracker. It includes Razor pages and views for displaying and managing expenses.
+- `ExpenseTrackerAPI`: This folder contains the API project for the backend, which handles all backend operations related to expense management. It includes controllers, models, and services for managing expenses.
+- `ExpenseTrackerWeb`: This folder contains the frontend, which provides a user interface for interacting with the expense tracker. The frontend must be in Razor pages.
 
+## Run command rule
+if you need to run any command please don't do it, write the command i will run it manually.
+
+## Stack
+- Frontend: Razor Pages
+- Backend: .NET
 
 ## C# Instructions
 Applies to: `**/*.cs`

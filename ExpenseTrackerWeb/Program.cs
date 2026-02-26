@@ -1,7 +1,16 @@
+using ExpenseTrackerWeb.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// Register the ExpenseApiService with a named HttpClient targeting the backend API.
+var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5155";
+builder.Services.AddHttpClient<ExpenseApiService>(client =>
+{
+    client.BaseAddress = new Uri(apiBaseUrl);
+});
 
 var app = builder.Build();
 

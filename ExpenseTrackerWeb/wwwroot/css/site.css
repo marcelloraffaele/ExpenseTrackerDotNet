@@ -29,3 +29,50 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* ?? Dashboard Layout ?? */
+.dashboard-header {
+  padding-top: 0.5rem;
+}
+
+.summary-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.summary-card:hover {
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+}
+
+.summary-icon {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+}
+
+/* ?? Category Badge ?? */
+.category-badge {
+  background-color: #4F81BD;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* ?? Chart Container ?? */
+.chart-container {
+  position: relative;
+  max-height: 260px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ?? Progress Bar Colors ?? */
+.progress-bar {
+  background-color: #4F81BD;
+}
+
+/* ?? Expense Table ?? */
+.text-truncate-cell {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
