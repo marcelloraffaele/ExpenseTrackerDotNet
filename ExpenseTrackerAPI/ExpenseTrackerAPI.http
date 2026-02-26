@@ -1,6 +1,61 @@
 @ExpenseTrackerAPI_HostAddress = http://localhost:5155
 
-GET {{ExpenseTrackerAPI_HostAddress}}/weatherforecast/
+### OpenAPI spec
+GET {{ExpenseTrackerAPI_HostAddress}}/openapi/v1.json
 Accept: application/json
+
+###
+
+### Get available categories
+GET {{ExpenseTrackerAPI_HostAddress}}/expenses/categories
+Accept: application/json
+
+###
+
+### Get all expenses
+GET {{ExpenseTrackerAPI_HostAddress}}/expenses
+Accept: application/json
+
+###
+
+### Add a new expense (with today as default date)
+POST {{ExpenseTrackerAPI_HostAddress}}/expenses
+Content-Type: application/json
+
+{
+  "amount": 25.50,
+  "category": "Food",
+  "description": "Lunch at the office"
+}
+
+###
+
+### Add a new expense (with manual date)
+POST {{ExpenseTrackerAPI_HostAddress}}/expenses
+Content-Type: application/json
+
+{
+  "amount": 15.00,
+  "category": "Transport",
+  "date": "2026-02-20",
+  "description": "Bus ticket"
+}
+
+###
+
+### Get monthly summary for the current month
+GET {{ExpenseTrackerAPI_HostAddress}}/expenses/monthly-summary
+Accept: application/json
+
+###
+
+### Get spending breakdown by category
+GET {{ExpenseTrackerAPI_HostAddress}}/expenses/category-breakdown
+Accept: application/json
+
+###
+
+### Delete an expense by id (replace the id with a real one)
+DELETE {{ExpenseTrackerAPI_HostAddress}}/expenses/00000000-0000-0000-0000-000000000000
 
 ###
