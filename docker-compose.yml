@@ -1,0 +1,24 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ExpenseTrackerAPI/Dockerfile
+    image: expense-tracker-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+    ports:
+      - "5155:8080"
+
+  web:
+    build:
+      context: .
+      dockerfile: ExpenseTrackerWeb/Dockerfile
+    image: expense-tracker-web
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+    ports:
+      - "5072:8080"
+    depends_on:
+      - api
