@@ -1,10 +1,182 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="app-shell" id="expenseApp" data-api-base-url="@Model.ApiBaseUrl.TrimEnd('/')">
+    <header class="topbar">
+        <a class="brand" href="/" aria-label="Spendly home">
+            <span class="brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 7h16M7 4v6M17 4v6M5 11h14v9H5z" /></svg>
+            </span>
+            <span>Spendly</span>
+        </a>
+        <nav class="main-nav" aria-label="Navigazione principale">
+            <a class="active" href="#dashboard">Dashboard</a>
+            <a href="#expenses">Spese</a>
+            <a href="#new-expense">Nuova spesa</a>
+        </nav>
+        <div class="profile">
+            <span class="profile-copy"><strong>Demo Account</strong><small>Personal</small></span>
+            <span class="avatar">DA</span>
+        </div>
+    </header>
+
+    <main class="dashboard" id="dashboard">
+        <section class="hero">
+            <div>
+                <p class="eyebrow">PANORAMICA FINANZIARIA</p>
+                <h1>Ciao! Ecco come stanno andando le tue spese.</h1>
+                <p class="hero-subtitle">Tieni sotto controllo ogni movimento, senza complicazioni.</p>
+            </div>
+            <button class="button button-primary" type="button" data-open-expense-modal>
+                <span aria-hidden="true">+</span> Aggiungi spesa
+            </button>
+        </section>
+
+        <section class="stats-grid" aria-label="Riepilogo spese">
+            <article class="stat-card stat-card-featured">
+                <div class="stat-heading">
+                    <span class="stat-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M4 8h16v11H4zM7 5h10v3M8 13h3" /></svg>
+                    </span>
+                    <span>Spese del mese</span>
+                </div>
+                <strong class="stat-value" id="monthlyTotal">€ 0,00</strong>
+                <p id="monthlyLabel">Mese corrente</p>
+            </article>
+            <article class="stat-card">
+                <div class="stat-heading">
+                    <span class="stat-icon stat-icon-soft" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M6 4h12v16H6zM9 8h6M9 12h6M9 16h3" /></svg>
+                    </span>
+                    <span>Movimenti</span>
+                </div>
+                <strong class="stat-value" id="expenseCount">0</strong>
+                <p>Spese registrate</p>
+            </article>
+            <article class="stat-card">
+                <div class="stat-heading">
+                    <span class="stat-icon stat-icon-soft" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 3v18M7 7.5C7 5.6 9 4 12 4s5 1.3 5 3-1.8 2.6-5 3.2S7 11.8 7 14s2.2 4 5 4 5-1.4 5-3.5" /></svg>
+                    </span>
+                    <span>Spesa media</span>
+                </div>
+                <strong class="stat-value" id="averageExpense">€ 0,00</strong>
+                <p>Per movimento</p>
+            </article>
+            <article class="stat-card">
+                <div class="stat-heading">
+                    <span class="stat-icon stat-icon-soft" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2" /></svg>
+                    </span>
+                    <span>Categoria principale</span>
+                </div>
+                <strong class="stat-value stat-value-category" id="topCategory">—</strong>
+                <p id="topCategoryAmount">Nessuna spesa</p>
+            </article>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel category-panel">
+                <div class="panel-heading">
+                    <div>
+                        <p class="eyebrow">DISTRIBUZIONE</p>
+                        <h2>Spese per categoria</h2>
+                    </div>
+                    <span class="live-badge"><span></span> Live</span>
+                </div>
+                <div class="category-list" id="categoryBreakdown">
+                    <div class="skeleton skeleton-row"></div>
+                    <div class="skeleton skeleton-row"></div>
+                    <div class="skeleton skeleton-row"></div>
+                </div>
+            </article>
+
+            <article class="panel transactions-panel" id="expenses">
+                <div class="panel-heading transactions-heading">
+                    <div>
+                        <p class="eyebrow">ATTIVITÀ RECENTE</p>
+                        <h2>Le tue spese</h2>
+                    </div>
+                    <div class="toolbar">
+                        <label class="search-field">
+                            <span class="visually-hidden">Cerca nelle spese</span>
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6" /><path d="m16 16 4 4" /></svg>
+                            <input id="expenseSearch" type="search" placeholder="Cerca..." />
+                        </label>
+                        <select id="categoryFilter" aria-label="Filtra per categoria">
+                            <option value="">Tutte le categorie</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrizione</th>
+                                <th>Categoria</th>
+                                <th>Data</th>
+                                <th class="amount-column">Importo</th>
+                                <th><span class="visually-hidden">Azioni</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="expenseTableBody">
+                            <tr><td colspan="5"><div class="skeleton skeleton-table"></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="empty-state" id="emptyState" hidden>
+                    <span class="empty-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M4 8h16v11H4zM8 8V5h8v3M9 13h6" /></svg>
+                    </span>
+                    <h3>Nessuna spesa trovata</h3>
+                    <p>Registra il primo movimento per iniziare a visualizzare le statistiche.</p>
+                    <button class="button button-secondary" type="button" data-open-expense-modal>Aggiungi la prima spesa</button>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <div class="modal-backdrop" id="expenseModal" hidden>
+        <section class="expense-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" id="new-expense">
+            <div class="modal-heading">
+                <div>
+                    <p class="eyebrow">NUOVO MOVIMENTO</p>
+                    <h2 id="modalTitle">Aggiungi una spesa</h2>
+                </div>
+                <button class="icon-button" type="button" data-close-expense-modal aria-label="Chiudi">×</button>
+            </div>
+            <form id="expenseForm">
+                <div class="form-grid">
+                    <label class="field">
+                        <span>Descrizione</span>
+                        <input name="description" type="text" maxlength="500" placeholder="Es. Pranzo con il team" required />
+                    </label>
+                    <label class="field">
+                        <span>Importo</span>
+                        <div class="amount-field"><span>€</span><input name="amount" type="number" min="0.01" step="0.01" placeholder="0,00" required /></div>
+                    </label>
+                    <label class="field">
+                        <span>Categoria</span>
+                        <select name="category" id="formCategory" required>
+                            <option value="">Seleziona una categoria</option>
+                        </select>
+                    </label>
+                    <label class="field">
+                        <span>Data</span>
+                        <input name="date" type="date" required />
+                    </label>
+                </div>
+                <p class="form-error" id="formError" role="alert" hidden></p>
+                <div class="modal-actions">
+                    <button class="button button-ghost" type="button" data-close-expense-modal>Annulla</button>
+                    <button class="button button-primary" type="submit" id="submitExpense">Salva spesa</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 </div>

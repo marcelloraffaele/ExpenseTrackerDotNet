@@ -5,15 +5,18 @@ namespace ExpenseTrackerWeb.Pages;
 
 public class IndexModel : PageModel
 {
-    private readonly ILogger<IndexModel> _logger;
-
-    public IndexModel(ILogger<IndexModel> logger)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="IndexModel"/> class.
+    /// </summary>
+    /// <param name="configuration">The application configuration.</param>
+    public IndexModel(IConfiguration configuration)
     {
-        _logger = logger;
+        ApiBaseUrl = configuration["ExpenseApi:BaseUrl"]
+            ?? throw new InvalidOperationException("ExpenseApi:BaseUrl is not configured.");
     }
 
-    public void OnGet()
-    {
-
-    }
+    /// <summary>
+    /// Gets the base URL used by the page to call the expense API.
+    /// </summary>
+    public string ApiBaseUrl { get; }
 }
